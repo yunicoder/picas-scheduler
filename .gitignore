@@ -130,3 +130,6 @@ dmypy.json
 
 # my document
 mydoc/
+
+# my venv
+picas-scheduler-env/
