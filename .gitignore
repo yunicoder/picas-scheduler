@@ -133,3 +133,6 @@ mydoc/
 
 # my venv
 picas-scheduler-env/
+
+# vscode
+.vscode/
