@@ -1,12 +1,10 @@
 import itertools
-from pathlib import Path
-from typing import Dict, List
+from typing import List
 
 from components.callback import CallBack, sort_cb_by_id
 from components.chain import Chain
-from components.core import Core, sort_core_by_utilization
+from components.core import Core
 from components.executor import Executor
-from components.node import Node, sort_nodes_by_highest_priority
 
 
 def check_satisfy_all_core_strategies(core: Core, assigned_executors: List[Executor], executors: List[Executor], chains: List[Chain]) -> bool:
@@ -55,7 +53,7 @@ def _check_strategy_five(num_callbacks: int, all_callbacks: List[CallBack], exec
 def _check_strategy_six(all_callbacks: List[CallBack], executors: List[Executor], chains: List[Chain]) -> bool:
     """戦略 VI を満たすかどうか
     
-    任意の二つのチェーンlow_priority_chain, high_priority_chainについて、優先度を比較して以下だったらTrue
+    任意の二つのチェーンについて、優先度を比較して以下だったらTrue
     (低優先度のチェイン内のコールバックを含むエグゼキュータ) < (高優先度のチェイン内のコールバックを含むエグゼキュータ)
     つまり、
     (低優先度のチェイン内のエグゼキュータの優先度の最大値) < (高優先度のチェイン内のエグゼキュータの優先度の最小値)
