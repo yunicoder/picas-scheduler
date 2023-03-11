@@ -10,6 +10,7 @@ class CallBack:
         self.priority: int = None  # 優先度
         self.node_id: int = node_id  # ノードid
         self.chain_id: int = chain_id  # チェインid
+        self.is_timer_callback: bool = (period != 0)  # タイマーコールバックかどうか
 
         self.assigned_executor_id: int = None  # 割り当てられたエグゼキューターid
 
@@ -26,12 +27,12 @@ def assign_period(callbacks: List[CallBack]) -> List[CallBack]:
     # チェインごとの周期を抽出
     chain_id_to_period = dict()
     for cb in callbacks:
-        if cb.period != 0:  # タイマーコールバック
+        if cb.is_timer_callback:  # タイマーコールバック
             chain_id_to_period[cb.chain_id] = cb.period
     
     # レギュラーコールバックにも周期を割り当てる
     for cb in callbacks:
-        if cb.period == 0:  # レギュラーコールバック
+        if not cb.is_timer_callback:  # レギュラーコールバック
             cb.period = chain_id_to_period[cb.chain_id]
     return callbacks
 
