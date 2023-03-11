@@ -23,13 +23,13 @@ class Node:
     
     def set_highest_priority(self) -> None:
         """このノードの中で最も高い優先度を計算してセットする
-        # NOTE: コールバックに優先度が割り当てられてからしか呼び出せない
+        NOTE: コールバックに優先度が割り当てられてからしか呼び出せない
         """
         self.highest_priority = max([cb.priority for cb in self.callbacks])
 
 def set_highest_priorities(nodes: List[Node]) -> List[Node]:
     """ノードの中で最も高い優先度を計算してセットする
-    # NOTE: コールバックに優先度が割り当てられてからしか呼び出せない
+    NOTE: コールバックに優先度が割り当てられてからしか呼び出せない
     """
     for node in nodes:
         node.set_highest_priority()

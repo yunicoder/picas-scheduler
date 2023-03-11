@@ -17,7 +17,7 @@ class CallBack:
         """割り当てられたエグゼキューターidをセットする
         基本的にexecutor.assign_callback()から呼ばれる
         """
-        self.assigned_executor = assigned_executor_id
+        self.assigned_executor_id = assigned_executor_id
 
 def assign_period(callbacks: List[CallBack]) -> List[CallBack]:
     """各コールバックの周期を決定する

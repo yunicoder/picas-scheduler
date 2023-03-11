@@ -15,6 +15,7 @@ def executor_core_assignment(
     nodes: List[Node],
     executors: List[Executor],
     cores: List[Core],
+    chains: List[Chain],
 ):
     not_assinned_nodes = nodes.copy()  # まだ割り当てられていないノード
     not_assinned_nodes = sort_nodes_by_highest_priority(not_assinned_nodes)  # 最も高い優先度を降順でソート
@@ -23,7 +24,7 @@ def executor_core_assignment(
         selected_nodes = _select_node(not_assinned_nodes)  # 選択されたノードのサブセット
         if _is_exist_empty_executor(executors):
             # Part A in the paper
-            not_assinned_nodes = partA_assignment(not_assinned_nodes, selected_nodes, executors, cores)
+            not_assinned_nodes = partA_assignment(not_assinned_nodes, selected_nodes, executors, cores, chains)
         else:
             # Part B in the paper
             not_assinned_nodes = partB_assignment(not_assinned_nodes, selected_nodes, executors)

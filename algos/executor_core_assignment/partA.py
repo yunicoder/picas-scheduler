@@ -9,7 +9,13 @@ from components.executor import Executor
 from components.node import Node, sort_nodes_by_highest_priority
 
 
-def partA_assignment(not_assinned_nodes: List[Node], selected_nodes: List[Node], executors: List[Executor], cores: List[Core]) -> List[Node]:
+def partA_assignment(
+    not_assinned_nodes: List[Node],
+    selected_nodes: List[Node],
+    executors: List[Executor],
+    cores: List[Core],
+    chains: List[Chain],
+) -> List[Node]:
     """
     選択されたノードを適切なエグゼキューターに、そのエグゼキューターを適切なコアを割り当てる
     まだ割り当てられていないノードを更新して返す
@@ -51,7 +57,7 @@ def partA_assignment(not_assinned_nodes: List[Node], selected_nodes: List[Node],
         # エグゼキューターをコアに割り当てる
         is_success_assign_core = False
         for core in selected_cores:
-            if check_satisfy_all_core_strategies(core, [selected_executor]):
+            if check_satisfy_all_core_strategies(core, [selected_executor], executors, chains):
                 core.assign_executor(selected_executor)  # 割り当て
                 is_success_assign_core = True
                 is_complete_assign_exe_and_core = True

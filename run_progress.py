@@ -4,7 +4,7 @@ from typing import Dict, List
 from algos.callback_priority_assignment import callback_priority_assignment
 from algos.executor_core_assignment.assingment import executor_core_assignment
 from components.callback import CallBack
-from components.chain import Chain
+from components.chain import set_chains_priority
 from components.initial_components import initial_components
 from components.node import set_highest_priorities
 from iostreams.reader import read_input
@@ -37,5 +37,8 @@ class RunProgress():
         # 各ノードの中で最も高い優先度をノードのインスタンス変数にセット
         self.nodes = set_highest_priorities(self.nodes)
 
+        # チェインの優先度を決定
+        self.chains = set_chains_priority(self.chains)
+
         # エグゼキューターとコアの割り当て
-        executor_core_assignment(self.nodes, self.executors, self.cores)
+        executor_core_assignment(self.nodes, self.executors, self.cores, self.chains)
