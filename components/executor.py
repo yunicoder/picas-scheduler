@@ -39,3 +39,7 @@ class Executor:
         for cb in self.callbacks:
             utilization += cb.wcet / cb.period
         return utilization
+    
+def sort_executors_by_utilization(executors: List[Executor]) -> List[Executor]:
+    """利用率でソート"""
+    return sorted(executors, key=lambda exe: exe.utilization)

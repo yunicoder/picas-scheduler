@@ -17,24 +17,24 @@ def executor_core_assignment(
     cores: List[Core],
     chains: List[Chain],
 ):
-    not_assinned_nodes = nodes.copy()  # まだ割り当てられていないノード
-    not_assinned_nodes = sort_nodes_by_highest_priority(not_assinned_nodes)  # 最も高い優先度を降順でソート
+    not_assigned_nodes = nodes.copy()  # まだ割り当てられていないノード
+    not_assigned_nodes = sort_nodes_by_highest_priority(not_assigned_nodes)  # 最も高い優先度を降順でソート
 
-    while len(not_assinned_nodes) != 0:
-        selected_nodes = _select_node(not_assinned_nodes)  # 選択されたノードのサブセット
+    while len(not_assigned_nodes) != 0:
+        selected_nodes = _select_node(not_assigned_nodes)  # 選択されたノードのサブセット
         if _is_exist_empty_executor(executors):
             # Part A in the paper
-            not_assinned_nodes = partA_assignment(not_assinned_nodes, selected_nodes, executors, cores, chains)
+            not_assigned_nodes = partA_assignment(not_assigned_nodes, selected_nodes, executors, cores, chains)
         else:
             # Part B in the paper
-            not_assinned_nodes = partB_assignment(not_assinned_nodes, selected_nodes, executors)
+            not_assigned_nodes = partB_assignment(not_assigned_nodes, selected_nodes, executors)
 
 
-def _select_node(not_assinned_nodes: List[Node]) -> List[Node]:
+def _select_node(not_assigned_nodes: List[Node]) -> List[Node]:
     """利用率が1を超えないようにノードを抽出"""
     utilization = 0
     selected_nodes = []
-    for node in not_assinned_nodes:
+    for node in not_assigned_nodes:
         selected_nodes.append(node)
         utilization += node.utilization
         if utilization > 1:

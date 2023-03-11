@@ -10,7 +10,7 @@ from components.node import Node, sort_nodes_by_highest_priority
 
 
 def partA_assignment(
-    not_assinned_nodes: List[Node],
+    not_assigned_nodes: List[Node],
     selected_nodes: List[Node],
     executors: List[Executor],
     cores: List[Core],
@@ -21,13 +21,13 @@ def partA_assignment(
     まだ割り当てられていないノードを更新して返す
 
     Args:
-        not_assinned_nodes: まだ割り当てられていないノード
+        not_assigned_nodes: まだ割り当てられていないノード
         selected_nodes: 選択されたノードのサブセット
         executors: エグゼキューターの集合
         cores: コアの集合
 
     Returns:
-        not_assinned_nodes: まだ割り当てられていないノード
+        not_assigned_nodes: まだ割り当てられていないノード
     """
     selected_executor = _select_executor(executors)  # 今回割り当てるエグゼキューターを決定
 
@@ -70,12 +70,12 @@ def partA_assignment(
     
     if is_complete_assign_exe_and_core:
         # エグゼキューターに割り当てられたので、割り当てられていないノードリストからpop
-        not_assinned_nodes = [node for node in not_assinned_nodes if node not in selected_nodes]
+        not_assigned_nodes = [node for node in not_assigned_nodes if node not in selected_nodes]
     else:
         # go to Part C
         pass
 
-    return not_assinned_nodes
+    return not_assigned_nodes
 
 
 def _select_executor(executors: List[Executor]) -> Executor:

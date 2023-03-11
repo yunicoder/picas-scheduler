@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from algos.callback_priority_assignment import callback_priority_assignment
-from algos.executor_core_assignment.assingment import executor_core_assignment
+from algos.executor_core_assignment.assignment import executor_core_assignment
 from components.callback import CallBack
 from components.chain import set_chains_priority
 from components.initial_components import initial_components
