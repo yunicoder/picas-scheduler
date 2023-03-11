@@ -8,13 +8,17 @@ from components.chain import set_chains_priority
 from components.initial_components import initial_components
 from components.node import set_highest_priorities
 from iostreams.reader import read_input
+from iostreams.writer import write_all_info
 
 
 class RunProgress():
 
-    def __init__(self, path: Path) -> None:
-        input = read_input(path)
-        
+    def __init__(self, input_path: Path, output_dir: Path) -> None:
+        input = read_input(input_path)
+
+        self.output_dir = output_dir
+        self.output_dir.mkdir(exist_ok=True, parents=True)
+
         self.num_cpus: int = input["num_cpus"]
         self.num_executors: int = input["num_executors"]
 
@@ -42,3 +46,13 @@ class RunProgress():
 
         # エグゼキューターとコアの割り当て
         executor_core_assignment(self.nodes, self.executors, self.cores, self.chains)
+
+        # csvに情報を出力
+        write_all_info(
+            self.output_dir,
+            self.callbacks,
+            self.chains,
+            self.nodes,
+            self.executors,
+            self.cores,
+        )
