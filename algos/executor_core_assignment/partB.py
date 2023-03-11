@@ -1,12 +1,9 @@
-from pathlib import Path
-from typing import Dict, List
+from typing import List
 
 from algos.executor_core_assignment.partC import (
     assign_lowest_utilization_core, merge_all_executors_containing_core)
 from algos.executor_strategy import check_satisfy_all_executor_strategies
-from components.callback import CallBack
-from components.chain import Chain
-from components.core import Core, sort_core_by_utilization
+from components.core import Core
 from components.executor import Executor, sort_executors_by_utilization
 from components.node import Node, sort_nodes_by_highest_priority
 
@@ -35,34 +32,36 @@ def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node],
         if len(selected_executors) == 0:
             if len(selected_nodes) > 1:
                 # 選択するノードを減らして再挑戦
+                selected_nodes = sort_nodes_by_highest_priority(selected_nodes)  # 最も高い優先度を降順でソート
                 selected_nodes = selected_nodes[:-1]
                 continue
             else:
                 # 一つしかノードがない場合はPart Cで無理やり割り当てる
-                assign_lowest_utilization_core()
+                assign_lowest_utilization_core(selected_nodes[0], cores)
                 is_complete_assign_exe = True  # 無理やりコアに割り当てられたのでwhileループ終了
                 break
 
-        # エグゼキューターを利用率が小さい順に走査して、ノードをエグゼキューターに割り当てる
-        is_success_assign_exe = False
+        # 利用率が小さい順に走査して、ノードをエグゼキューターに割り当てる
         selected_executors = sort_executors_by_utilization(selected_executors)
         for exe in selected_executors:
             if check_satisfy_all_executor_strategies(exe, [selected_nodes]):
-                # HACK: 割り当てるのnode単位でやった方がいい
                 callbacks = [cb for node in selected_nodes for cb in node.callbacks]
-                for cb in callbacks:
-                    exe.assign_callback(cb) # 割り当て
-                is_success_assign_exe = True
+                exe.assign_callbacks(callbacks) # 割り当て
+                is_complete_assign_exe = True
                 break  # 割り当て完了
         
-        if is_success_assign_exe:
-            # エグゼキューターに割り当てられたノードは割り当てられていないノードリストからpop
-            not_assigned_nodes = [node for node in not_assigned_nodes if node not in selected_nodes]
-            is_complete_assign_exe = True  # エグゼキューターに割り当てられたのでwhileループ終了
+        if is_complete_assign_exe:
+            break  # 割り当てられたのでwhileループ終了
         else:
-            # どのエグゼキューターにも割り当てれれなかった場合 Part C へ
-            merge_all_executors_containing_core()
-            is_complete_assign_exe = True  # 無理やりエグゼキューターに割り当てられたのでwhileループ終了
+            # どのエグゼキューターにも割り当てれれなかった場合、PartCで無理やり割り当てる
+            # 最も利用率の低いエグゼキューターを含むコア  TODO: どのコアに割り当てるか要確認
+            target_core = [core for core in cores if core.core_id == selected_executors[0].assigned_core_id][0]
+            merge_all_executors_containing_core(target_core)
+            is_complete_assign_exe = True
+            break  # 無理やりコアに割り当てられたのでwhileループ終了
+
+    # エグゼキューターに割り当てられたノードは割り当てられていないノードリストからpop
+    not_assigned_nodes = [node for node in not_assigned_nodes if node not in selected_nodes]
 
     return not_assigned_nodes
 

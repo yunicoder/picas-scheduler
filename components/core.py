@@ -14,10 +14,6 @@ class Core:
         # 割り当て
         self.executors.append(executor)
 
-        # # 優先度でソート
-        # # NOTE: 優先度順に割り当てるならこれいらないかも
-        # callbacks = sort_cb_by_priority(callbacks)
-
         # 利用率の更新
         self._update_utilization()
 

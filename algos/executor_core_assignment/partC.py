@@ -1,22 +1,42 @@
-from pathlib import Path
-from typing import Dict, List
+from typing import List
 
-from algos.executor_strategy import check_satisfy_all_executor_strategies
-from components.callback import CallBack
-from components.chain import Chain
 from components.core import Core, sort_core_by_utilization
-from components.executor import Executor
-from components.node import Node, sort_nodes_by_highest_priority
+from components.executor import Executor, sort_executors_by_utilization
+from components.node import Node
 
 
-def assign_lowest_utilization_core():
+def assign_lowest_utilization_core(selected_node: Node, cores: List[Core]):
     """最も優先度の低いコアに割り当てる
     
     (利用率が1以下のコアが見つからなかった) and (ノードが一つである) 場合に呼ばれる
     """
-    return
+    lowest_utilization_core = sort_core_by_utilization(cores)[0]
+
+    # 一時的なエグゼキューターを作成してそこにノードを割り当てる
+    temp_executor = Executor(executor_id=99999)
+    temp_executor.assign_callbacks(selected_node.callbacks)
+    
+    # 一時的なエグゼキューターを最も優先度の低いコアに割り当てる
+    # NOTE: 次の関数でエグゼキューターは一つにまとめらる
+    lowest_utilization_core.assign_executor(temp_executor)
+
+    # エグゼキューターを一つにまとめる
+    merge_all_executors_containing_core(lowest_utilization_core)
 
 
-def merge_all_executors_containing_core():
-    """コアに含まれる全てのエグゼキューターを一つのエグゼキューターにマージする"""
-    return
+def merge_all_executors_containing_core(target_core: Core):
+    """コアに含まれる全てのエグゼキューターを一つのエグゼキューターにマージする
+    
+    実行可能なコアが見つかったが、戦略を満たさなかった場合に呼ばれる
+    """
+    # 唯一残すエグゼキューター
+    # TODO: どのエグゼキューターを残すか要確認
+    merge_target_executor = sort_executors_by_utilization(target_core.executors)[0]
+
+    for exe in target_core.executors:
+        if exe.executor_id == merge_target_executor.executor_id:
+            continue  # 残すエグゼキューターは無視
+        
+        # 残すエグゼキューターにコールバックを移す
+        merge_target_executor.assign_callbacks(exe.callbacks)
+        exe.reinitialization()  # エグゼキューターの初期化

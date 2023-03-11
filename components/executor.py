@@ -18,20 +18,20 @@ class Executor:
         """
         self.assigned_core_id = assigned_core_id
         
-    def assign_callback(self, callback: CallBack) -> None:
+    def assign_callbacks(self, callbacks: List[CallBack]) -> None:
         """コールバックをエグゼキューターに割り当てる"""
         # 割り当てられたコールバックに追加
-        self.callbacks.append(callback)
+        self.callbacks.extend(callbacks)
 
         # 優先度でソート
-        # NOTE: 優先度順に割り当てるならこれいらないかも
         self.callbacks = sort_cb_by_priority(self.callbacks)
 
         # 利用率の更新
         self.utilization = self._update_utilization()
 
-        # コールバックのインスタンスにエグゼキューターを登録する
-        callback.set_assigned_executor(self.executor_id)
+        # 各コールバックのインスタンスにエグゼキューターを登録する
+        for cb in callbacks:
+            cb.set_assigned_executor(self.executor_id)
 
     def _update_utilization(self) -> int:
         """利用率を更新"""
@@ -40,6 +40,11 @@ class Executor:
             utilization += cb.wcet / cb.period
         return utilization
     
+    def reinitialization(self) -> None:
+        """エグゼキューターの再初期化"""
+        self.callbacks = []
+        self._update_utilization()
+
 def sort_executors_by_utilization(executors: List[Executor]) -> List[Executor]:
     """利用率でソート"""
     return sorted(executors, key=lambda exe: exe.utilization)

@@ -16,7 +16,7 @@ class CallBack:
 
     def set_assigned_executor(self, assigned_executor_id: int):
         """割り当てられたエグゼキューターidをセットする
-        基本的にexecutor.assign_callback()から呼ばれる
+        基本的にexecutor.assign_callbacks()から呼ばれる
         """
         self.assigned_executor_id = assigned_executor_id
 

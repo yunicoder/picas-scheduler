@@ -75,10 +75,10 @@ def _check_strategy_six(all_callbacks: List[CallBack], executors: List[Executor]
         high_priority_chain = chain_i if chain_i.priority >= chain_j.priority else chain_j
 
         # チェインに含まれているコールバックが割り当てられているエグゼキューター一覧
-        exe_id_containing_lpchain: List[int] = [cb.assigned_executor_id for cb in low_priority_chain.callbacks]
+        exe_id_containing_lpchain: List[int] = [cb.assigned_executor_id for cb in all_callbacks if cb.chain_id == low_priority_chain.chain_id]
         exe_containing_lpchain: List[Executor] = [exe for exe in executors if exe.executor_id in exe_id_containing_lpchain]
 
-        exe_id_containing_hpchain: List[int] = [cb.assigned_executor_id for cb in high_priority_chain.callbacks]
+        exe_id_containing_hpchain: List[int] = [cb.assigned_executor_id for cb in all_callbacks if cb.chain_id == high_priority_chain.chain_id]
         exe_containing_hpchain: List[Executor] = [exe for exe in executors if exe.executor_id in exe_id_containing_hpchain]
 
         # 低優先度のチェイン(lpchain)内 の エグゼキュータの優先度の最大値

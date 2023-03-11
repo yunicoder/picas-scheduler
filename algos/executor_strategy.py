@@ -115,9 +115,9 @@ def _check_strategy_three(all_callbacks: List[CallBack], chains: List[Chain]) ->
         high_priority_chain = chain_i if chain_i.priority >= chain_j.priority else chain_j
 
         # 低優先度のチェイン(lpchain)内のコールバック優先度の最大値
-        max_cb_priority_containing_lpchain = max([cb.priority for cb in low_priority_chain.callbacks])
+        max_cb_priority_containing_lpchain = max([cb.priority for cb in all_callbacks if cb.chain_id == low_priority_chain.chain_id])
         # 高優先度のチェイン(hpchain)内のコールバック優先度の最小値
-        min_cb_priority_containing_hpchain = min([cb.priority for cb in high_priority_chain.callbacks])
+        min_cb_priority_containing_hpchain = min([cb.priority for cb in all_callbacks if cb.chain_id == high_priority_chain.chain_id])
 
         # 戦略IIIのチェック
         if max_cb_priority_containing_lpchain < min_cb_priority_containing_hpchain:
