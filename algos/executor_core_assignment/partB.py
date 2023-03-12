@@ -50,7 +50,7 @@ def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node],
             # exeが割り当てられているコア
             core_assigned_exe = [core for core in cores if core.core_id == exe.assigned_core_id][0]
             if (
-                check_satisfy_all_executor_strategies(exe, [selected_nodes], chains)
+                check_satisfy_all_executor_strategies(exe, selected_nodes, chains)
                 and check_satisfy_all_core_strategies(core_assigned_exe, [exe], executors, chains)
             ):
                 callbacks = [cb for node in selected_nodes for cb in node.callbacks]

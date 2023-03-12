@@ -50,7 +50,7 @@ def _check_strategy_one(all_regular_callbacks: List[CallBack]) -> bool:
     
     # 隣同士の優先度を比較してどんどん大きくなっていっていればTrue
     for i in range(len(all_regular_callbacks) - 1):
-        if all_regular_callbacks[i].priority < all_regular_callbacks[i+1].priority:
+        if all_regular_callbacks[i].priority > all_regular_callbacks[i+1].priority:
             res = False
             break  # これ以降のコールバックをチェックする必要ないのでbreak
 
@@ -116,9 +116,9 @@ def _check_strategy_three(all_callbacks: List[CallBack], chains: List[Chain]) ->
         high_priority_chain = chain_i if chain_i.priority >= chain_j.priority else chain_j
 
         # 低優先度のチェイン(lpchain)内のコールバック優先度の最大値
-        max_cb_priority_containing_lpchain = max([cb.priority for cb in all_callbacks if cb.chain_id == low_priority_chain.chain_id])
+        max_cb_priority_containing_lpchain = max([cb.priority for cb in all_callbacks])
         # 高優先度のチェイン(hpchain)内のコールバック優先度の最小値
-        min_cb_priority_containing_hpchain = min([cb.priority for cb in all_callbacks if cb.chain_id == high_priority_chain.chain_id])
+        min_cb_priority_containing_hpchain = min([cb.priority for cb in all_callbacks])
 
         # 戦略IIIのチェック
         if max_cb_priority_containing_lpchain < min_cb_priority_containing_hpchain:
@@ -150,6 +150,7 @@ def _check_strategy_four(all_callbacks: List[CallBack], chains: List[Chain]) -> 
     
     ※各チェーンは個別に戦略IIに従う
     """
+    res = True
     chains_id_containing_executor = list(set([cb.chain_id for cb in all_callbacks]))
     chains_containing_executor = [chain for chain in chains if chain.chain_id in chains_id_containing_executor]
     num_chains_containing_executor = len(chains_containing_executor)
