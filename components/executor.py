@@ -27,18 +27,18 @@ class Executor:
         self.callbacks = sort_cb_by_priority(self.callbacks)
 
         # 利用率の更新
-        self.utilization = self._update_utilization()
+        self._update_utilization()
 
         # 各コールバックのインスタンスにエグゼキューターを登録する
         for cb in callbacks:
             cb.set_assigned_executor(self.executor_id)
 
-    def _update_utilization(self) -> int:
+    def _update_utilization(self) -> None:
         """利用率を更新"""
         utilization = 0
         for cb in self.callbacks:
             utilization += cb.wcet / cb.period
-        return utilization
+        self.utilization = utilization
     
     def reinitialization(self) -> None:
         """エグゼキューターの再初期化"""
