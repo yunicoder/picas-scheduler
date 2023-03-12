@@ -1,14 +1,16 @@
 from typing import List
 
+from algos.core_strategy import check_satisfy_all_core_strategies
 from algos.executor_core_assignment.partC import (
     assign_lowest_utilization_core, merge_all_executors_containing_core)
 from algos.executor_strategy import check_satisfy_all_executor_strategies
+from components.chain import Chain
 from components.core import Core
 from components.executor import Executor, sort_executors_by_utilization
 from components.node import Node, sort_nodes_by_highest_priority
 
 
-def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node], executors: List[Executor], cores: List[Core]) -> List[Node]:
+def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node], executors: List[Executor], cores: List[Core], chains: List[Chain]) -> List[Node]:
     """
     選択されたノードを適切なエグゼキューターに割り当てる
     まだ割り当てられていないノードを更新して返す
@@ -18,6 +20,7 @@ def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node],
         selected_nodes: 選択されたノードのサブセット
         executors: エグゼキューターの集合
         cores: コアの集合
+        chain: チェインの集合
 
     Returns:
         not_assigned_nodes: まだ割り当てられていないノード
@@ -44,7 +47,12 @@ def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node],
         # 利用率が小さい順に走査して、ノードをエグゼキューターに割り当てる
         selected_executors = sort_executors_by_utilization(selected_executors)
         for exe in selected_executors:
-            if check_satisfy_all_executor_strategies(exe, [selected_nodes]):  # TODO: V,VIのチェックも必要
+            # exeが割り当てられているコア
+            core_assigned_exe = [core for core in cores if core.core_id == exe.assigned_core_id][0]
+            if (
+                check_satisfy_all_executor_strategies(exe, [selected_nodes], chains)
+                and check_satisfy_all_core_strategies(core_assigned_exe, [exe], executors, chains)
+            ):
                 callbacks = [cb for node in selected_nodes for cb in node.callbacks]
                 exe.assign_callbacks(callbacks) # 割り当て
                 is_complete_assign_exe = True

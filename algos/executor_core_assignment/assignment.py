@@ -27,7 +27,7 @@ def executor_core_assignment(
             not_assigned_nodes = partA_assignment(not_assigned_nodes, selected_nodes, executors, cores, chains)
         else:
             # Part B in the paper
-            not_assigned_nodes = partB_assignment(not_assigned_nodes, selected_nodes, executors)
+            not_assigned_nodes = partB_assignment(not_assigned_nodes, selected_nodes, executors, cores, chains)
 
 
 def _select_node(not_assigned_nodes: List[Node]) -> List[Node]:
