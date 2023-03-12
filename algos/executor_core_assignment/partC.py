@@ -10,7 +10,17 @@ def assign_lowest_utilization_core(selected_node: Node, cores: List[Core]):
     
     (利用率が1以下のコアが見つからなかった) and (ノードが一つである) 場合に呼ばれる
     """
-    lowest_utilization_core = sort_core_by_utilization(cores)[0]
+    # lowest_utilization_core = sort_core_by_utilization(cores)[0]
+    # もっとも利用率が低いコアを抽出
+    # NOTE: [exeの数]<[coreの数]の場合(PartBからこの関数に来る場合)、
+    # 現状エグゼキューターが割り当てられていないコアは、どう頑張っても使用されないコアなので、
+    # 一つ以上エグゼキューターを含んでいるコアの中で選択する必要がある
+    lowest_utilization_core: Core
+    cores = sort_core_by_utilization(cores)
+    for core in cores:
+        if len(core.executors) >= 1:
+            lowest_utilization_core = core
+            break
 
     # 一時的なエグゼキューターを作成してそこにノードを割り当てる
     temp_executor = Executor(executor_id=99999)
