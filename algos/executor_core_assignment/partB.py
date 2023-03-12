@@ -35,7 +35,7 @@ def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node],
         if len(selected_executors) == 0:
             if len(selected_nodes) > 1:
                 # 選択するノードを減らして再挑戦
-                selected_nodes = sort_nodes_by_highest_priority(selected_nodes)  # 最も高い優先度を降順でソート
+                selected_nodes = sort_nodes_by_highest_priority(selected_nodes, is_decending=True)  # 最も高い優先度を降順でソート
                 selected_nodes = selected_nodes[:-1]
                 continue
             else:

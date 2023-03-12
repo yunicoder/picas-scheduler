@@ -18,7 +18,7 @@ def executor_core_assignment(
     chains: List[Chain],
 ):
     not_assigned_nodes = nodes.copy()  # まだ割り当てられていないノード
-    not_assigned_nodes = sort_nodes_by_highest_priority(not_assigned_nodes)  # 最も高い優先度を降順でソート
+    not_assigned_nodes = sort_nodes_by_highest_priority(not_assigned_nodes, is_decending=True)  # 最も高い優先度を降順でソート
 
     while len(not_assigned_nodes) != 0:
         selected_nodes = _select_node(not_assigned_nodes)  # 選択されたノードのサブセット

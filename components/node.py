@@ -35,10 +35,11 @@ def set_highest_priorities(nodes: List[Node]) -> List[Node]:
         node.set_highest_priority()
     return nodes
 
-def sort_nodes_by_highest_priority(nodes: List[Node]) -> List[Node]:
-    """最も高い優先度でソート"""
-    # 降順にしないといけない点に注意
-    return sorted(nodes, key=lambda node: node.highest_priority, reverse=True)
+def sort_nodes_by_highest_priority(nodes: List[Node], is_decending=False) -> List[Node]:
+    """最も高い優先度でソート
+    何も指定しなければ昇順でソートされる
+    """
+    return sorted(nodes, key=lambda node: node.highest_priority, reverse=is_decending)
  
 def exclude_lowest_priority_in_nodes(nodes: List[Node]) -> List[Node]:
     """最も優先度の低いコールバックを含むノードを除去して返す"""
