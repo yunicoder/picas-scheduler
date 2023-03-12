@@ -7,7 +7,7 @@ from components.callback import CallBack
 from components.chain import Chain
 from components.core import Core, sort_core_by_utilization
 from components.executor import Executor
-from components.node import Node, sort_nodes_by_highest_priority
+from components.node import Node, exclude_lowest_priority_in_nodes
 
 
 def partA_assignment(
@@ -48,10 +48,8 @@ def partA_assignment(
         # 割り当てるべきコアがない場合
         if len(selected_cores) == 0:
             if len(selected_nodes) > 1:
-                # 選択するノードを減らして再挑戦
-                # TODO: 要確認
-                selected_nodes = sort_nodes_by_highest_priority(selected_nodes)  # 最も高い優先度を降順でソート
-                selected_nodes = selected_nodes[:-1]
+                # 選択されたノードの中で最も低いコールバックを含むノードを除去して再挑戦
+                selected_nodes = exclude_lowest_priority_in_nodes(selected_nodes)
                 continue
             else:
                 # 一つしかノードがない場合はPartCで無理やり割り当てる
@@ -71,7 +69,6 @@ def partA_assignment(
             break  # 割り当てられたのでwhileループ終了
         else:
             # どのコアにも割り当てれれなかった場合、PartCで無理やり割り当てる
-            # TODO: どのコアに割り当てるか要確認
             target_core = selected_cores[0]  # 最も利用率の低いコア
             merge_all_executors_containing_core(target_core)
             is_complete_assign_exe_and_core = True

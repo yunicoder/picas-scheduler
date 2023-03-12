@@ -1,6 +1,6 @@
 from typing import List
 
-from .callback import CallBack, sort_cb_by_id
+from .callback import CallBack, sort_cb_by_id, sort_cb_by_priority
 
 
 class Node:
@@ -40,3 +40,14 @@ def sort_nodes_by_highest_priority(nodes: List[Node]) -> List[Node]:
     # 降順にしないといけない点に注意
     return sorted(nodes, key=lambda node: node.highest_priority, reverse=True)
  
+def exclude_lowest_priority_in_nodes(nodes: List[Node]) -> List[Node]:
+    """最も優先度の低いコールバックを含むノードを除去して返す"""
+    all_callbacks = [cb for node in nodes for cb in node.callbacks]
+    
+    # 最も優先度の低いコールバック
+    lowest_priority_callback = sort_cb_by_priority(all_callbacks)[0]
+
+    # 最も優先度の低いコールバックを含むノードを除去
+    nodes = [node for node in nodes if node.node_id != lowest_priority_callback.node_id]
+
+    return nodes
