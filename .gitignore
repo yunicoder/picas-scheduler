@@ -136,3 +136,6 @@ picas-scheduler-env/
 
 # vscode
 .vscode/
+
+# output
+data/output/
