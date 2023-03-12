@@ -35,10 +35,10 @@ def _select_node(not_assigned_nodes: List[Node]) -> List[Node]:
     utilization = 0
     selected_nodes = []
     for node in not_assigned_nodes:
-        selected_nodes.append(node)
         utilization += node.utilization
         if utilization > 1:
             break
+        selected_nodes.append(node)
     return selected_nodes
 
 
