@@ -48,11 +48,16 @@ def _write_chains_info(output_dir: Path, chains: List[Chain]) -> None:
     columns = ["chain_id", "contain_callback_ids", "priority", "wcet_sum"]
     columns_str = ",".join(columns) + "\n"
 
+
     # 情報
     chains_info = []
     for chain in chains:
+        # チェインに含まれるコールバック
+        cb_ids = [f"{cb.callback_id}" for cb in chain.callbacks]
+        cb_ids_str = "-".join(cb_ids)
+
         chains_info.append(
-            f"{chain.chain_id},{[cb.callback_id for cb in chain.callbacks]},{chain.priority},{chain.wcet_sum}"
+            f"{chain.chain_id},{cb_ids_str},{chain.priority},{chain.wcet_sum}"
         )
     chains_info_str = "\n".join(chains_info)
     
@@ -70,8 +75,12 @@ def _write_nodes_info(output_dir: Path, nodes: List[Node]) -> None:
     # 情報
     nodes_info = []
     for node in nodes:
+        # ノードに含まれるコールバック
+        cb_ids = [f"{cb.callback_id}" for cb in node.callbacks]
+        cb_ids_str = "-".join(cb_ids)
+        
         nodes_info.append(
-            f"{node.node_id},{[cb.callback_id for cb in node.callbacks]},{node.utilization},{node.highest_priority}"
+            f"{node.node_id},{cb_ids_str},{node.utilization},{node.highest_priority}"
         )
     nodes_info_str = "\n".join(nodes_info)
     
@@ -89,8 +98,12 @@ def _write_executors_info(output_dir: Path, executors: List[Executor]) -> None:
     # 情報
     executors_info = []
     for executor in executors:
+        # エグゼキューターに割り当てられているコールバック
+        cb_ids = [f"{cb.callback_id}" for cb in executor.callbacks]
+        cb_ids_str = "-".join(cb_ids)
+
         executors_info.append(
-            f"{executor.executor_id},{[cb.callback_id for cb in executor.callbacks]},{executor.priority},{executor.utilization},{executor.assigned_core_id}"
+            f"{executor.executor_id},{cb_ids_str},{executor.priority},{executor.utilization},{executor.assigned_core_id}"
         )
     executors_info_str = "\n".join(executors_info)
     
@@ -108,8 +121,12 @@ def _write_cores_info(output_dir: Path, cores: List[Core]) -> None:
     # 情報
     cores_info = []
     for core in cores:
+        # コアに割り当てられているコールバック
+        exe_ids = [f"{exe.executor_id}" for exe in core.executors]
+        exe_ids_str = "-".join(exe_ids)
+
         cores_info.append(
-            f"{core.core_id},{[exe.executor_id for exe in core.executors]},{core.utilization}"
+            f"{core.core_id},{exe_ids_str},{core.utilization}"
         )
     cores_info_str = "\n".join(cores_info)
     
