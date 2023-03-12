@@ -8,7 +8,7 @@ class Chain:
         self.chain_id: int = chain_id  # チェインid
         self.callbacks: List[CallBack] = self._cb_preprocess(callbacks)  # チェインに含まれているcb
         self.wcet_sum: int = sum([cb.wcet for cb in callbacks]) # 最悪実行の合計
-        self.priority: int = None  # 優先度 TODO:これ自分で勝手に決めていいっけ？
+        self.priority: int = None  # 優先度
 
 
     def _cb_preprocess(self, callbacks: List[CallBack]) -> List[CallBack]:
