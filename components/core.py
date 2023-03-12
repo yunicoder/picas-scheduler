@@ -23,6 +23,12 @@ class Core:
     def _update_utilization(self) -> None:
         """利用率を更新"""
         self.utilization = sum([exe.utilization for exe in self.executors])
+
+    def reinitialization(self) -> None:
+        """コアの初期化"""
+        self.executors = []
+        self._update_utilization()
+
     
 
 def sort_core_by_utilization(cores: List[Core]) -> List[Core]:

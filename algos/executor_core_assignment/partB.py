@@ -44,7 +44,7 @@ def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node],
         # 利用率が小さい順に走査して、ノードをエグゼキューターに割り当てる
         selected_executors = sort_executors_by_utilization(selected_executors)
         for exe in selected_executors:
-            if check_satisfy_all_executor_strategies(exe, [selected_nodes]):
+            if check_satisfy_all_executor_strategies(exe, [selected_nodes]):  # TODO: V,VIのチェックも必要
                 callbacks = [cb for node in selected_nodes for cb in node.callbacks]
                 exe.assign_callbacks(callbacks) # 割り当て
                 is_complete_assign_exe = True
