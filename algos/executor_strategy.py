@@ -11,8 +11,9 @@ def check_satisfy_all_executor_strategies(executor: Executor, assigned_nodes: Li
     """
     戦略 I, II, III, IV を満たすかどうか
     Args:
-        core: 割り当てるエグゼキューター
+        executor: 割り当てるエグゼキューター
         assigned_nodes: コアに割り当てられる予定のノード
+        chain: チェインの集合
     """
     res = True
     all_callbacks = [cb for cb in executor.callbacks] + [cb for node in assigned_nodes for cb in node.callbacks]

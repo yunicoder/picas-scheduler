@@ -38,10 +38,6 @@ def partA_assignment(
         # エグゼキューターの初期化 (空のエグゼキューターしかここでは登場しない)
         selected_executor.reinitialization()
 
-        # 選択されたノードを一旦エグゼキューターに割り当てる
-        callbacks = [cb for node in selected_nodes for cb in node.callbacks]
-        selected_executor.assign_callbacks(callbacks)
-
         # 割り当て可能なCPUコアを選択する
         selected_cores = _select_cores(selected_executor, cores)
         
@@ -56,6 +52,10 @@ def partA_assignment(
                 assign_lowest_utilization_core(selected_nodes[0], cores)
                 is_complete_assign_exe_and_core = True
                 break  # 無理やりコアに割り当てられたのでwhileループ終了
+        
+        # 選択されたノードを一旦エグゼキューターに割り当てる
+        callbacks = [cb for node in selected_nodes for cb in node.callbacks]
+        selected_executor.assign_callbacks(callbacks)
 
         # 利用率の小さい順に走査して、エグゼキューターをコアに割り当てる
         selected_cores = sort_core_by_utilization(selected_cores)
@@ -68,14 +68,19 @@ def partA_assignment(
         if is_complete_assign_exe_and_core:
             break  # 割り当てられたのでwhileループ終了
         else:
-            # どのコアにも割り当てれれなかった場合、PartCで無理やり割り当てる
+            # 実行可能なコアは見つかったが戦略を満たせない場合、
+            # コア内のエグゼキューターを一つに集約して戦略を必ず満たせるようにする
             target_core = selected_cores[0]  # 最も利用率の低いコア
             merge_all_executors_containing_core(target_core)
-            is_complete_assign_exe_and_core = True
-            break  # 無理やりエグゼキューターに割り当てられたのでwhileループ終了
 
-    # エグゼキューターに割り当てられたノードを、割り当てられていないノードリストからpop
-    not_assigned_nodes = [node for node in not_assigned_nodes if node not in selected_nodes]
+            # エグゼキューター->コアの割り当て失敗
+            selected_executor.reinitialization()  # エグゼキューターの初期化
+            is_complete_assign_exe_and_core = False
+            break  # 失敗
+
+    if is_complete_assign_exe_and_core:
+        # エグゼキューターに割り当てられたノードを、割り当てられていないノードリストからpop
+        not_assigned_nodes = [node for node in not_assigned_nodes if node not in selected_nodes]
 
     return not_assigned_nodes
 
