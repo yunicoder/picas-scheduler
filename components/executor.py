@@ -49,6 +49,8 @@ def sort_executors_by_utilization(executors: List[Executor]) -> List[Executor]:
     """利用率でソート"""
     return sorted(executors, key=lambda exe: exe.utilization)
 
-def sort_executors_by_priority(executors: List[Executor]) -> List[Executor]:
-    """優先度でソート"""
-    return sorted(executors, key=lambda exe: exe.priority)
+def sort_executors_by_priority(executors: List[Executor], is_decending=False) -> List[Executor]:
+    """優先度でソート
+    何も指定しなければ降順でソートされる
+    """
+    return sorted(executors, key=lambda exe: exe.priority, reverse=is_decending)

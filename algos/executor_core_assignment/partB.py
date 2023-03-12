@@ -62,7 +62,7 @@ def partB_assignment(not_assigned_nodes: List[Node], selected_nodes: List[Node],
             break  # 割り当てられたのでwhileループ終了
         else:
             # どのエグゼキューターにも割り当てれれなかった場合、PartCで無理やり割り当てる
-            # 最も利用率の低いエグゼキューターを含むコア  TODO: どのコアに割り当てるか要確認
+            # 最も利用率の低いエグゼキューターを含むコア
             target_core = [core for core in cores if core.core_id == selected_executors[0].assigned_core_id][0]
             merge_all_executors_containing_core(target_core)
             is_complete_assign_exe = True

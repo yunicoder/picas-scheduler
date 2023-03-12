@@ -6,7 +6,7 @@ from algos.executor_core_assignment.partC import (
 from components.callback import CallBack
 from components.chain import Chain
 from components.core import Core, sort_core_by_utilization
-from components.executor import Executor
+from components.executor import Executor, sort_executors_by_priority
 from components.node import Node, exclude_lowest_priority_in_nodes
 
 
@@ -86,10 +86,11 @@ def partA_assignment(
 
 
 def _select_executor(executors: List[Executor]) -> Executor:
-    """今回割り当てるエグゼキューターを決定
+    """今回割り当てるエグゼキューター (最も優先度の高い空のエグゼキューター) を決定
     NOTE: partAに入る前にチェックしているので必ず空のエグゼキューターが存在する
     """
-    # NOTE: executorsは優先度順に並んでいる必要がある
+    # 優先度の高い順番に走査して、空のエグゼキューターを見つける
+    executors = sort_executors_by_priority(executors, is_decending=True)
     for exe in executors:
         if len(exe.callbacks) == 0:  # 空のエグゼキューター
             return exe
