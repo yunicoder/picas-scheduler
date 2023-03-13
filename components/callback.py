@@ -3,7 +3,7 @@ from typing import List
 
 
 class CallBack:
-    def __init__(self, callback_id: int, wcet: int, period: int, node_id: int, chain_id: int):
+    def __init__(self, callback_id: int, wcet: int, period: int, node_id: int, chain_id: int, node_name: str):
         self.callback_id: int = callback_id  # コールバックid
         self.wcet: int = wcet # 最悪実行時間
         self.period: int = period  # 周期 (相対デッドライン)
@@ -11,6 +11,7 @@ class CallBack:
         self.node_id: int = node_id  # ノードid
         self.chain_id: int = chain_id  # チェインid
         self.is_timer_callback: bool = (period != 0)  # タイマーコールバックかどうか
+        self.node_name:str = node_name
 
         self.assigned_executor_id: int = None  # 割り当てられたエグゼキューターid
 

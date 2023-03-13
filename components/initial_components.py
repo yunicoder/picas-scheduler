@@ -38,12 +38,14 @@ def _initial_callback(input_cbs: Dict[str, Dict[str, int]]) -> Tuple[int, List[C
     # create callback instance
     for id in range(num_callbacks):
         cur_input_cb = input_cbs[f"cb{id}"]
+        node_name: str = cur_input_cb["node_name"] if "node_name" in cur_input_cb else "no_name"
         callback = CallBack(
             callback_id=id,
             wcet=cur_input_cb["exec"],
             period=cur_input_cb["period"],
             node_id=cur_input_cb["node_id"],
             chain_id=cur_input_cb["chain_id"],
+            node_name=node_name,
         )
         callbacks.append(callback)
 
